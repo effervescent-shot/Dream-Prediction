@@ -20,7 +20,7 @@ from keras.preprocessing.image import ImageDataGenerator
 #import cv2 as cv
 from dreamUtils import *
 
-print('DreamNetworks is ready!')
+print('Dream Networks are ready!')
 
 def Baseline_NN(input_dimenson = 256):
     """ 
@@ -38,25 +38,33 @@ def Baseline_NN(input_dimenson = 256):
     """
     model = Sequential()
     # first layer
-    model.add(Dense(128,   # or 100
+    model.add(Dense(256,   # or 100
                     input_dim=input_dimenson, 
-                    kernel_initializer='normal',   # 'normal', initializers.Constant(value=0), ...
-    #                 kernel_regularizer=regularizers.l2(0.01),  # smooth filters, but bad accuracy
+                    kernel_initializer='glorot_uniform',   # 'normal', initializers.Constant(value=0), ...
+                    #kernel_regularizer=regularizers.l2(0.01),  # smooth filters, but bad accuracy
                     activation='sigmoid'))  # 'relu', 'sigmoid', 'tanh', ...
     # second layer
-    model.add(Dense(32, 
-                    kernel_initializer='normal',   # 'normal', ...
-    #                 kernel_regularizer=regularizers.l2(0.1),  # smooth filters, but bad accuracy
+    model.add(Dense(128, 
+                    kernel_initializer='glorot_uniform',   # 'normal', ...
+                    #kernel_regularizer=regularizers.l2(0.01),  # smooth filters, but bad accuracy
                     activation='sigmoid'))
     # third layer
-    model.add(Dense(8, 
-                    kernel_initializer='normal',   # 'normal', ...
-    #                 kernel_regularizer=regularizers.l2(0.1),  # smooth filters, but bad accuracy
+    model.add(Dense(64, 
+                    kernel_initializer='glorot_uniform',   # 'normal', ...
+                    #kernel_regularizer=regularizers.l2(0.01),  # smooth filters, but bad accuracy
                     activation='sigmoid'))
+    # fourth layer
+    model.add(Dense(32, 
+                    kernel_initializer='glorot_uniform',   # 'normal', ...
+                    #kernel_regularizer=regularizers.l2(0.01),  # smooth filters, but bad accuracy
+                    activation='sigmoid'))
+    # drop-out layer to prevent overfitting
+    model.add(Dropout(rate=0.3))
+    
     # last layer
     model.add(Dense(3, 
-                    kernel_initializer='normal',   # 'normal', ...
-    #                 kernel_regularizer=regularizers.l2(0.1),  # smooth filters, but bad accuracy
+                    kernel_initializer='glorot_uniform',   # 'normal', ...
+                    #kernel_regularizer=regularizers.l2(0.01),  # smooth filters, but bad accuracy
                     activation='softmax'))
     # compile
     model.compile(loss='categorical_crossentropy',
@@ -65,9 +73,9 @@ def Baseline_NN(input_dimenson = 256):
     
     return model
 
-def Simple_CNN_Image16():
+def Simple_CNN_Image32():
     """ 
-   Expecting 16x16x1 image data as input
+   Expecting 32x32x1 image data as input
    
    Conv2D<64> - Conv2D<32> -  Dense<3>
    kernel_initializer = None
@@ -84,10 +92,11 @@ def Simple_CNN_Image16():
     # create model
     model = Sequential()
     # add layers
-    model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(16,16,1)))
+    model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(32,32,1)))
     model.add(Conv2D(32, kernel_size=3, activation='relu'))
     # fully connected
     model.add(Flatten())
+    model.add(Dropout(rate=0.35))
     model.add(Dense(3, activation='softmax'))
 
     # compile model
@@ -137,6 +146,7 @@ def CNN_Image32():
     # fully connected layer
     model.add(Flatten())
     model.add(Dense(512))
+    model.add(Dropout(rate=0.35))
     model.add(Dense(3, activation='softmax'))
     
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
@@ -195,7 +205,7 @@ def CNN_Multichannel_Image32(num_color_chan = 2):
     return model
     
     
-def CNN_Video32(time_slot = 10):
+def CNN_Video32(time_slot = 100):
     """ 
    Expecting Tx32x32x1 image data as input
    T = time_slot

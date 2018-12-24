@@ -216,5 +216,6 @@ def gen_images(locs, features, n_gridpoints, normalize=False,
                 scale(temp_interp[c][~np.isnan(temp_interp[c])])
         temp_interp[c] = np.nan_to_num(temp_interp[c])
         
-    print('Interpolated {0}/{1}\r'.format(nSamples, nSamples), end='\r')    
+    print('Interpolated {0}/{1}\r'.format(nSamples, nSamples), end='\r')
+    print()
     return np.swapaxes(np.asarray(temp_interp), 0, 1) 

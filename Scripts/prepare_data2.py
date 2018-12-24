@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 import scipy.io as sio
 
-
-DATA_DIR_REG = './dream_data/'
-DATA_DIR_FFT = './dream_data_fft/'
+DATA_DIR = os.getcwd()+'/Data/'
+DATA_DIR_REG = DATA_DIR +'dream_data/'
+DATA_DIR_FFT = DATA_DIR +'dream_data_fft/'
 
 channels_coord = 'channelcoords.mat'
 datadir = os.listdir(DATA_DIR_REG)
@@ -20,11 +20,11 @@ SAMPLING_RATE = 500
 def readlabels():
     
     # Read trial ids and labels from excel 
-    datalabels = pd.read_excel(open('./Dream_reports_healthy.xlsx','rb'),\
-                           dtype={'Subject_id':str, 'Quest_number':str, 'Stage':int, 'CE':float, 'Segment excluded':int})
+    datalabels = pd.read_excel(open(DATA_DIR +'./Dream_reports_healthy.xlsx','rb'),\
+                           dtype={'Subject_id':str, 'Quest_number':str, 'Stage':int, 'CE':float})
     datalabels.dropna(subset=['CE'], inplace=True)
-    datalabels = datalabels[datalabels['Segment excluded'] == 0]
     datalabels.Quest_number = datalabels.Quest_number.apply(lambda x: 'S0'+x if len(x)<2 else 'S'+x)
+    
     return datalabels
 
 
@@ -49,10 +49,10 @@ def prepare_raw_data(datalabels, second = 20):
             datafiles.append(datapath)
 
     print('Total number of .mat files found: ',len(datafiles))
-    
+    #print(datafiles)
+
     all_data = []
     all_labels = []
-    df_ind = []
 
     for rowid in datalabels.index:
         sid = datalabels.get_value(rowid, 'Subject_id')
@@ -67,18 +67,18 @@ def prepare_raw_data(datalabels, second = 20):
             ind = filenames.index(fnamelist[0])
             # Find the datapath of file
             fpath = datafiles[ind]
-            df_ind.append(ind)
             # read the last 30 second of the file and append it to the list
-            arrays = {}
+            
             try :
-                f = h5py.File(fpath)
+                arrays = {}
+                f = h5py.File(fpath, 'r+')
                 for k, v in f.items():
                     arrays[k] = np.array(v)
 
                 mydata = (arrays['datavr'])[-(second*SAMPLING_RATE):,0:256]
                 all_data.append(mydata)
                 all_labels.append(label)
-                #print(fpath , 'DONE' )
+                print(fpath , 'DONE' )
                 f.close()
 
             except Exception as e:
@@ -91,12 +91,10 @@ def prepare_raw_data(datalabels, second = 20):
     else:
         print('In raw, some files are missed while reading')
         print(len(all_data) , len(datafiles))
-        miss = np.setdiff1d(np.arange( len(datafiles)) , np.array( df_ind ))
-        for m in miss:
-            print('Missing files: ', datafiles[m])
+        print('Missing files: ', missingfiles)
 
 
-    fileName = str(second)+'sec_raw_data_zip'
+    fileName = DATA_DIR + str(second)+'sec_raw_data_zip'
     np.savez_compressed(fileName, data=all_data, labels=all_labels)
         
         
@@ -120,10 +118,11 @@ def prepare_fft_data(datalabels):
             datafiles.append(datapath)
 
     print('Total number of .mat files found: ',len(datafiles))
+    #print(datafiles)
 
     all_data = []
     all_labels = []
-    df_ind = []
+
     for rowid in datalabels.index:
         sid = datalabels.get_value(rowid, 'Subject_id')
         qn = datalabels.get_value(rowid, 'Quest_number')
@@ -131,16 +130,14 @@ def prepare_fft_data(datalabels):
         # Find .mat file belongs to this trial
         fname = re.compile(r"^"+sid + "_.*_" + qn+ "_DeltaGamma.mat")
         fnamelist = list(filter(fname.search, filenames))
-        print(sid, qn, fnamelist)
         # Check if any match
         if len(fnamelist)>0:
             #print(sid, qn , fnamelist)
             ind = filenames.index(fnamelist[0])
             # Find the datapath of file
             fpath = datafiles[ind]
-            df_ind.append(ind) 
             # read the last 30 second of the file and append it to the list
-
+            #print(fpath)
             try:
                 a_trial = sio.loadmat(fpath)
                 delta =  a_trial['delta'].T[:,0:256]
@@ -153,8 +150,6 @@ def prepare_fft_data(datalabels):
                 all_data.append(two_channel_data)
                 all_labels.append(label)
             except Exception as e:
-                print(e)
-                print('exception file: ', fpath)
                 missingfiles.append(fpath)
 
 
@@ -163,29 +158,25 @@ def prepare_fft_data(datalabels):
     else:
         print('At FFT, some files are missed while reading')
         print(len(all_data) , len(datafiles))
-        miss = np.setdiff1d(np.arange( len(datafiles)) , np.array( df_ind ))
-        for m in miss:
-            print('Missing files: ', datafiles[m])
+        print('Missing files: ', missingfiles)
 
-    fileName = 'fft_data_zip'
+
+    fileName = DATA_DIR + 'fft_data_zip'
     np.savez_compressed(fileName, data=all_data, labels=all_labels)
         
         
-        
-        
 def main():
-    sec = 20
+    print ('Hello there')
+    sec=20
     try:
         sec = int(sys.argv[1])
-    except Exception  as e:
-        print('How many seconds you want?')
-
-        
-    print ('Start reading for ', sec, ' seconds')    
+    except Exception as e:
+        print('How many second you want?')
+           
     datalabels = readlabels()
     prepare_raw_data(datalabels, second=sec)
     prepare_fft_data(datalabels)
-    print('All done!')  
+      
         
 # Command line args are in sys.argv[1], sys.argv[2] ..
 # sys.argv[0] is the script name itself and can be ignored
@@ -201,7 +192,7 @@ if __name__ == '__main__':
         
         
 
-############## TO LOAD ############
+#### TO LOAD ########
 # loaded = np.load(fileName+'.npz')
 # d = loaded['data']
 # l = loaded['labels']
