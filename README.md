@@ -4,6 +4,10 @@ Usage of neural networks in neuroimaging area is becoming increasingly common du
 
 ## File Structure
 ### Notebooks
+Under this folder, enumerated jupyter notebooks shows the development process of the project. They are left to give an idea about teh progress.
 ### Scripts
+All models, helper functions and scripts for preprocessing are under this folder. To run the models one needs to run _tf|_modelRun.py_ script with required parameters. 
 ### Data 
+Because of privacy concerns, real data is not uploaded but pseudo verisons can be found under this folder. Please note that this is just to show data format. Pseudo data is generated with random numbers.
 ### Results
+Trained and saved models are under results file. Summary of model architectures can be found sample training outputs.
