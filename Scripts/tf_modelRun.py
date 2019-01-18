@@ -18,7 +18,6 @@ from tensorflow.python.keras.layers import Conv3D, MaxPooling3D, LSTM
 from tensorflow.python.keras.layers.core import Dense, Dropout, Activation, Flatten
 
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
-#import cv2 as cv
 from tf_dreamUtils import *
 from tf_dreamNetworks import *
 
@@ -29,6 +28,10 @@ np.random.seed(1235)
 from tensorflow.python.keras import backend as K
 
 def as_keras_metric(method):
+    """
+    Multiclass precision - recall 
+    Override Keras default
+    """
     import functools
     @functools.wraps(method)
     def wrapper(self, args, **kwargs):
@@ -47,7 +50,15 @@ recall = as_keras_metric(tf.metrics.recall)
 
 def reformat_input(filename, model_type, sample, alter_label=False):
     """
-    label: default for DE,DEWR and NE classification. If alter specified then DE vs NE classification
+    Read datafiles and reformat matrices according to input shape of models
+    Alter 3-class to 2-class if specified, sample data set if specified
+    Make target values (train_y, validation_y, test_y) categorical
+    Suffle the indices then return train, validation and test sets
+
+    :param filename: data file name
+    :param model_type: model to be tested. Each model has its own dataset
+    :param sample: boolean, if true train, validation and test sets are downsampled with fraction 0.2
+    :param alter_label: boolean for 2-class classification, if true only NE and DE labels are included, DEWR are excluded 
     """
 
     if model_type == 'Baseline' or model_type == 'Logistic':
@@ -65,6 +76,7 @@ def reformat_input(filename, model_type, sample, alter_label=False):
 
         rawdata = np.array(rawdata_normalized)   
         
+        # Train, validation and test split
         x_tr, y_tr, x_va, y_va, x_te, y_te = tt_split(rawdata, label, ratio=0.9)
      
         print('Balancing the dataset with ')
@@ -95,18 +107,9 @@ def reformat_input(filename, model_type, sample, alter_label=False):
 
         x_tr_new = x_tr[indices_tr]
         y_tr_new = y_tr[indices_tr]
-    
-   
-        #unique, counts = np.unique(y_tr_new , return_counts=True)
-        #print('Label distribution in the train set ', np.asarray((unique, counts)).T)
+
        
-        #unique, counts = np.unique(y_va , return_counts=True)
-        #print('Label distribution in the validation set ', np.asarray((unique, counts)).T)
-    
-        #unique, counts = np.unique(y_te , return_counts=True)
-        #print('Label distribution in the test set ', np.asarray((unique, counts)).T)
-       
-    
+        #Assign the same label of the trial to each data point in the trial   
         #Create train matrix  
         X_train = np.concatenate(x_tr_new, axis = 0)
         y_train = np.concatenate([lab(y, x_tr_new[0].shape[0]) for y in y_tr_new])
@@ -124,11 +127,6 @@ def reformat_input(filename, model_type, sample, alter_label=False):
             y_train[y_train==2] = 1
             y_valid[y_valid==2] = 1
             y_test[y_test==2] = 1
-
-        # encode labels as one-hot vectors
-        #y_train = np_utils.to_categorical(y_train)
-        #y_valid = np_utils.to_categorical(y_valid)
-        #y_test = np_utils.to_categorical(y_test)
    
         
     elif model_type == 'Image-Single' or model_type == 'Image-Multi' or model_type == 'Image-Simple':
@@ -146,12 +144,7 @@ def reformat_input(filename, model_type, sample, alter_label=False):
         X_train = np.array( [np.rollaxis(x,0,3) for x in X_train ] )
         X_valid = np.array( [np.rollaxis(x,0,3) for x in X_valid] )
         X_test = np.array( [np.rollaxis(x,0,3) for x in X_test ] )
-   
 
-        # encode labels as one-hot vectors
-        #y_train = np_utils.to_categorical(y_train)
-        #y_valid = np_utils.to_categorical(y_valid)
-        #y_test = np_utils.to_categorical(y_test)
     
     elif model_type == 'Video-Single' or model_type == 'Video-Multi':
         loaded = np.load(filename)
@@ -169,13 +162,11 @@ def reformat_input(filename, model_type, sample, alter_label=False):
         X_valid = np.array( [np.rollaxis(x,1,4) for x in X_valid ] )
         X_test = np.array( [np.rollaxis(x,1,4) for x in X_test ] )
        
-        # encode labels as one-hot vectors
-        #y_train = np_utils.to_categorical(y_train)
-        #y_valid = np_utils.to_categorical(y_valid)
-        #y_test = np_utils.to_categorical(y_test)
 
-    ############ Alter labels to 2 Class case: DE vs NE #################
+    ################# Alter labels to 2 Class case: DE vs NE #################
     if alter_label and (model_type != 'Baseline' and model_type!='Logistic') :
+        #Choose data has label NE(1) and DE(2)
+
         lab0 = np.squeeze(np.argwhere(y_train == 0))
         lab2 = np.squeeze(np.argwhere(y_train == 2))
         indices_train = np.concatenate((lab0,lab2), axis=0)
@@ -187,7 +178,8 @@ def reformat_input(filename, model_type, sample, alter_label=False):
         lab0 = np.squeeze(np.argwhere(y_test == 0))
         lab2 = np.squeeze(np.argwhere(y_test == 2))
         indices_test = np.concatenate((lab0,lab2), axis=0)
-
+        
+        #Change labelling 2->1 for 2-class case 
         X_train = X_train[indices_train]
         y_train = y_train[indices_train] 
         y_train[y_train==2] = 1
@@ -199,9 +191,8 @@ def reformat_input(filename, model_type, sample, alter_label=False):
         X_valid = X_valid[indices_valid]
         y_valid = y_valid[indices_valid]
         y_valid[y_valid==2] = 1
-
     ###################################################################################
-    ###################################################################################   
+
  
     #Shuffle the datasets
     indices_train = np.arange(X_train.shape[0])
@@ -241,7 +232,7 @@ def reformat_input(filename, model_type, sample, alter_label=False):
         X_test = X_test[indices_test]
         y_test = y_test[indices_test]
 
-
+    # Print label count of datasets by trial
     unique, counts = np.unique(y_train , return_counts=True)
     print('Label distribution in the train set ', np.asarray((unique, counts)).T)
 
@@ -267,7 +258,16 @@ def reformat_input(filename, model_type, sample, alter_label=False):
 
 
 def train_tune(sample,filename, model_type, batch_size=32, num_epochs=10, run_id=0):
-    #sample = False
+    """
+    Tune hyper-parameters of models via grid search
+    :param sample: boolean, if true data is downsampled with fraction of 0.2 
+    :param filename: data file name
+    :param model_type: model to be tested
+    :param batch_size: batch_size of SGD
+    :param num_epochs:  number of epochs of training 
+    :param run_id: runner identifier 
+    """
+
     X_train, y_train , X_test, y_test, X_valid, y_valid = reformat_input(filename, model_type, sample)
     
     X_train = X_train.astype("float32", casting='unsafe')
@@ -282,25 +282,19 @@ def train_tune(sample,filename, model_type, batch_size=32, num_epochs=10, run_id
     d_layers = [128,256,512]
     k_regularizer = regularizers.l2(0.001)
     input_dim = 256 #512
-    ################################################################################
-
-
-
-    ####################### TUNING ########################
+    ###############################################################################
     
 
-
-
-    # Create neural network model (depending on first command line parameter)
+    # Create neural network models
     print("Building model and compiling functions...")
     # Building the appropriate model
+
     if model_type == 'Baseline':
         model = Baseline_NN(nb_channels=nb_channels, dropoutRate = dropoutRate, k_regularizer = k_regularizer, input_dimension = input_dim)
         model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
   
    
     elif model_type == 'Image-Simple':
-        #model = Simple_CNN(img_size=X_train.shape[1], num_color_chan=X_train.shape[3])
         model = Simple_CNN()
         model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
 
@@ -314,26 +308,26 @@ def train_tune(sample,filename, model_type, batch_size=32, num_epochs=10, run_id
                                        k_regularizer = k_regularizer, img_size=X_train.shape[1], num_color_chan=X_train.shape[3])
                      sgd= optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) #this is  for raw image
                      model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
-                     
-                     #print("Starting training... Params: ", act, ' ', k_size, ' ', d_layer, ' ', dropoutRate, ' ANAN...')
                      print("Starting training...")
                      model.summary()
                      model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=num_epochs, batch_size=batch_size, verbose=2)
                      scores = model.evaluate(X_test, y_test, batch_size=batch_size, verbose=2)
                      print("Accuracy: %.2f%%" % (scores[1]*100))
-
-
-
-        #model = CNN_Image(nb_channels=nb_channels, dropoutRate = dropoutRate, act=act, k_size=k_size, d_layer = d_layer,
-        #                  k_regularizer = k_regularizer, img_size=X_train.shape[1], num_color_chan=X_train.shape[3])
-        #sgd= optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) #this is  for raw image
-        #model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
     
     elif model_type == 'Image-Multi':
-        model = CNN_Image_Multi(nb_channels=nb_channels, dropoutRate = dropoutRate, act=act, k_size=k_size, d_layer = d_layer, 
-                                k_regularizer = k_regularizer, img_size=X_train.shape[1], num_color_chan=X_train.shape[3])
-        sgd = optimizers.SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True) #this is for multichannel image
-        model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
+       for act in acts:
+            for k_size in k_sizes:
+                for d_layer in d_layers:
+                         
+                     model = CNN_Image_Multi(nb_channels=nb_channels, dropoutRate = dropoutRate, act=act, k_size=k_size, d_layer = d_layer, 
+                                       k_regularizer = k_regularizer, img_size=X_train.shape[1], num_color_chan=X_train.shape[3])
+                     sgd= optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) #this is  for raw image
+                     model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
+                     print("Starting training...")
+                     model.summary()
+                     model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=num_epochs, batch_size=batch_size, verbose=2)
+                     scores = model.evaluate(X_test, y_test, batch_size=batch_size, verbose=2)
+                     print("Accuracy: %.2f%%" % (scores[1]*100))
         
 
     elif model_type == 'Video-Single':
@@ -344,20 +338,11 @@ def train_tune(sample,filename, model_type, batch_size=32, num_epochs=10, run_id
                      model = CNN_Video(nb_channels=nb_channels, dropoutRate = dropoutRate, act=act, k_size=k_size, d_layer = d_layer, k_regularizer = k_regularizer)
                      sgd =  optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) #this is for single channel video
                      model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
-
-
-                     #print("Starting training... Params: ", act, ' ', k_size, ' ', d_layer, ' ', dropoutRate)
                      print("Starting training...: ", model_type )
                      model.summary()
                      model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=num_epochs, batch_size=batch_size, verbose=2)
                      scores = model.evaluate(X_test, y_test, batch_size=batch_size, verbose=2)
                      print("Accuracy: %.2f%%" % (scores[1]*100))
-
-
-
-        #model = CNN_Video(nb_channels=nb_channels, dropoutRate = dropoutRate, act=act, k_size=k_size, d_layer = d_layer, k_regularizer = k_regularizer)
-        #sgd =  optimizers.SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True) #this is for single channel video
-        #model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
     
     elif model_type == 'Video-Multi':
         for act in acts:
@@ -367,21 +352,11 @@ def train_tune(sample,filename, model_type, batch_size=32, num_epochs=10, run_id
                     model = CNN_Video_Multi(nb_channels=nb_channels, dropoutRate = dropoutRate, act=act, k_size=k_size, d_layer = d_layer, k_regularizer = k_regularizer)
                     sgd =  optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) #this is for multichannel video
                     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
-
-
-                    #print("Starting training... Params: ", act, ' ', k_size, ' ', d_layer, ' ', dropoutRate)
                     print("Starting training...: ", model_type )
                     model.summary()
                     model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=num_epochs, batch_size=batch_size, verbose=2)
                     scores = model.evaluate(X_test, y_test, batch_size=batch_size, verbose=2)
                     print("Accuracy: %.2f%%" % (scores[1]*100))
-
-
-
-        #model = CNN_Video_Multi(nb_channels=nb_channels, dropoutRate = dropoutRate, act=act, k_size=k_size, d_layer = d_layer, k_regularizer = k_regularizer)
-        #sgd =  optimizers.SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True) #this is for multichannel video
-        #model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy',precision,recall])
-      
 
     elif model_type == 'LSTM':
         model = LSTM(time_slot= X_train.shape[1], img_size=X_train.shape[2], num_color_chan=X_train.shape[4])
@@ -397,15 +372,23 @@ def train_tune(sample,filename, model_type, batch_size=32, num_epochs=10, run_id
     #model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=num_epochs, batch_size=batch_size, verbose=2)
     #scores = model.evaluate(X_test, y_test, batch_size=batch_size, verbose=2)
     #print("Accuracy: %.2f%%" % (scores[1]*100))
+    # Save the model
     #model.save('./results/'+model_type+'/run'+str(run_id)+'_'+filename+str(num_epochs)+'.h5')
 
 
-
-
-
 def train(sample, filename, model_type, batch_size=32, num_epochs=10, run_id=0):
-    
+    """
+    Train models
 
+    :param sample: boolean, if true data is downsampled with fraction of 0.2 
+    :param filename: data file name
+    :param model_type: model to be tested
+    :param batch_size: batch_size of SGD
+    :param num_epochs:  number of epochs of training 
+    :param run_id: runner identifier 
+    """
+
+    # Flag To change labelling to 2-class
     label_two = False
   
     X_train, y_train , X_test, y_test, X_valid, y_valid = reformat_input(filename, model_type, sample, alter_label = label_two)
@@ -414,11 +397,11 @@ def train(sample, filename, model_type, batch_size=32, num_epochs=10, run_id=0):
     X_valid = X_valid.astype("float32", casting='unsafe')
     X_test = X_test.astype("float32", casting='unsafe')
     
-    ############################ Play with parameters ##############################
+
     nb_channels=3
-    if(label_two):
+    # If true, train for 2-class
+    if(label_two): 
         nb_channels = 2
-    ###############################################################################
     
 
 
@@ -473,44 +456,50 @@ def train(sample, filename, model_type, batch_size=32, num_epochs=10, run_id=0):
         raise ValueError("Model not supported []")
 
     print("Starting training...: model ", model_type, ' batch size ', batch_size, ' with input ', filename)
+    # Model summary 
     model.summary()
+
     model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=num_epochs, batch_size=batch_size, verbose=2)
     prediction = model.predict(X_test)
-    #print(prediction)
+    # Count number of unique target values for each possible one
     print(np.bincount(np.argmax(prediction,axis=-1))  )
-    #print(y_test)
+    
+    # Calculate the metrics specified for training
     scores = model.evaluate(X_test, y_test, batch_size=batch_size, verbose=2)
     print("Accuracy: %.2f%%" % (scores[1]*100))
+
+    # Save the model
     model.save('./results/'+model_type+'/run'+str(run_id)+'_'+ str(nb_channels)+'_class_'+filename[:-4]+ '_' + str(num_epochs)+'.h5')
 
 
 
 def main():
-    #filename = (sys.argv[1])
-    #model_type =(sys.argv[2])
-    #nb_epochs = int(sys.argv[3])
-    #b_size = int(sys.argv[4])
-    #sample = ast.literal_eval(sys.argv[5])
-    #r_id = (sys.argv[6])
     
-    #train(sample, filename, model_type, batch_size=b_size, num_epochs=nb_epochs, run_id = r_id)
+    try:
+        filename = (sys.argv[1]) # Data file name
+        model_type =(sys.argv[2]) # Model type
+        nb_epochs = int(sys.argv[3]) # Number of epochs
+        b_size = int(sys.argv[4]) # Batch size of SGD
+        sample = ast.literal_eval(sys.argv[5]) # If true data downsampled to 0.2 of size
+        r_id = (sys.argv[6]) # running identifier
+    except:
+        print('Please specify the training parameters: filename, model type, number of epochs, batch size, if sample and run identifier ')
+
+    train(sample, filename, model_type, batch_size=b_size, num_epochs=nb_epochs, run_id = r_id)
     
     #train(True, '20sec_raw_data_zip.npz', 'Baseline', batch_size=100, num_epochs=30, run_id = 1)
     #train(False, '2sec_fft_data_SW_zip.npz', 'Baseline', batch_size=10, num_epochs=30, run_id = 1)
 
-
     #train(True, '32_32_last20sec_img.npz', 'Image-Single', batch_size=100, num_epochs=30, run_id = 1)
     #train(False, '32_32_multichannel_img.npz', 'Image-Multi', batch_size=10, num_epochs=2, run_id = 1)
 
-    train(False, '32_32_last20sec_videos.npz', 'Video-Single', batch_size=100, num_epochs=15, run_id = 1)
+    #train(False, '32_32_last20sec_videos.npz', 'Video-Single', batch_size=100, num_epochs=15, run_id = 1)
     #train(False,'32_32_multichannel_videos.npz', 'Video-Multi', batch_size=10, num_epochs=10, run_id = 1)
-    
 
+    # Hyper-parameter tuning
     #train_tune(True, '32_32_last20sec_videos.npz', 'Video-Single', batch_size=32, num_epochs=3, run_id = 0)
     #train_tune(False, '32_32_multichannel_videos.npz', 'Video-Multi', batch_size=10, num_epochs=3, run_id = 0)
 
-
-    print('All done!')  
 
 if __name__ == '__main__':
       main()      
