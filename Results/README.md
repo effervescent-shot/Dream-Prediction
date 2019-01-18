@@ -1,4 +1,4 @@
-# File Structure
+### File Structure
 
 All texts file are standard output of model trainings with multiple epochs. 
 Each model is trained for both raw data FFT data.
