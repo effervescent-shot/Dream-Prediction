@@ -1,0 +1,134 @@
+Dream Networks are ready!
+Label distribution in the train set  [[0.000e+00 5.194e+03]
+ [1.000e+00 7.742e+03]]
+Label distribution in the validation set  [[  0. 196.]
+ [  1. 196.]]
+Label distribution in the test set  [[0.000e+00 2.940e+02]
+ [1.000e+00 1.372e+03]]
+Train matrix:  (12936, 100, 32, 32, 1) (12936, 2)
+Validation matrix:  (392, 100, 32, 32, 1) (392, 2)
+Test matrix:  (1666, 100, 32, 32, 1) (1666, 2)
+Building model and compiling functions...
+PARAMETERS OF MODELS:  relu   5   256
+Starting training...: model  Video-Single  batch size  32  with input  32_32_last20sec_videos.npz
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv3d (Conv3D)              (None, 91, 28, 28, 32)    8032      
+_________________________________________________________________
+conv3d_1 (Conv3D)            (None, 91, 28, 28, 32)    256032    
+_________________________________________________________________
+conv3d_2 (Conv3D)            (None, 91, 28, 28, 32)    256032    
+_________________________________________________________________
+conv3d_3 (Conv3D)            (None, 91, 28, 28, 32)    256032    
+_________________________________________________________________
+max_pooling3d (MaxPooling3D) (None, 9, 5, 5, 32)       0         
+_________________________________________________________________
+conv3d_4 (Conv3D)            (None, 9, 5, 5, 64)       512064    
+_________________________________________________________________
+conv3d_5 (Conv3D)            (None, 9, 5, 5, 64)       1024064   
+_________________________________________________________________
+max_pooling3d_1 (MaxPooling3 (None, 4, 2, 2, 64)       0         
+_________________________________________________________________
+flatten (Flatten)            (None, 1024)              0         
+_________________________________________________________________
+dense (Dense)                (None, 256)               262400    
+_________________________________________________________________
+dropout (Dropout)            (None, 256)               0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 2)                 514       
+=================================================================
+Total params: 2,575,170
+Trainable params: 2,575,170
+Non-trainable params: 0
+_________________________________________________________________
+Train on 12936 samples, validate on 392 samples
+Epoch 1/10
+ - 549s - loss: 0.6698 - acc: 0.5986 - precision: 0.4988 - recall: 0.9976 - val_loss: 0.6996 - val_acc: 0.5000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 2/10
+ - 547s - loss: 0.6474 - acc: 0.6224 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6953 - val_acc: 0.5255 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 3/10
+ - 547s - loss: 0.6012 - acc: 0.6697 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6031 - val_acc: 0.7015 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 4/10
+ - 547s - loss: 0.5319 - acc: 0.7262 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5602 - val_acc: 0.6633 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 5/10
+ - 547s - loss: 0.4267 - acc: 0.7938 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4752 - val_acc: 0.8036 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 6/10
+ - 546s - loss: 0.3062 - acc: 0.8629 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5313 - val_acc: 0.7321 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 7/10
+ - 546s - loss: 0.2041 - acc: 0.9147 - precision: 0.5000 - recall: 1.0000 - val_loss: 1.0784 - val_acc: 0.7296 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 8/10
+ - 546s - loss: 0.1272 - acc: 0.9508 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.7553 - val_acc: 0.7398 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 9/10
+ - 545s - loss: 0.0827 - acc: 0.9674 - precision: 0.5000 - recall: 1.0000 - val_loss: 1.1228 - val_acc: 0.6429 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 10/10
+ - 545s - loss: 0.0621 - acc: 0.9765 - precision: 0.5000 - recall: 1.0000 - val_loss: 1.3810 - val_acc: 0.6173 - val_precision: 0.5000 - val_recall: 1.0000
+[ 355 1311]
+Accuracy: 83.85%
+Label distribution in the train set  [[0.000e+00 1.113e+03]
+ [1.000e+00 1.638e+03]]
+Label distribution in the validation set  [[ 0. 21.]
+ [ 1. 63.]]
+Label distribution in the test set  [[  0.  84.]
+ [  1. 315.]]
+Train matrix:  (2751, 10, 32, 32, 2) (2751, 2)
+Validation matrix:  (84, 10, 32, 32, 2) (84, 2)
+Test matrix:  (399, 10, 32, 32, 2) (399, 2)
+Building model and compiling functions...
+PARAMETERS OF MODELS:  relu   3   128
+Starting training...: model  Video-Multi  batch size  10  with input  32_32_multichannel_videos.npz
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv3d_6 (Conv3D)            (None, 9, 30, 30, 32)     1184      
+_________________________________________________________________
+conv3d_7 (Conv3D)            (None, 9, 30, 30, 32)     18464     
+_________________________________________________________________
+conv3d_8 (Conv3D)            (None, 9, 30, 30, 32)     18464     
+_________________________________________________________________
+conv3d_9 (Conv3D)            (None, 9, 30, 30, 32)     18464     
+_________________________________________________________________
+max_pooling3d_2 (MaxPooling3 (None, 4, 15, 30, 32)     0         
+_________________________________________________________________
+conv3d_10 (Conv3D)           (None, 4, 15, 30, 64)     36928     
+_________________________________________________________________
+conv3d_11 (Conv3D)           (None, 4, 15, 30, 64)     73792     
+_________________________________________________________________
+max_pooling3d_3 (MaxPooling3 (None, 2, 7, 15, 64)      0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 13440)             0         
+_________________________________________________________________
+dense_2 (Dense)              (None, 128)               1720448   
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 128)               0         
+_________________________________________________________________
+dense_3 (Dense)              (None, 2)                 258       
+=================================================================
+Total params: 1,888,002
+Trainable params: 1,888,002
+Non-trainable params: 0
+_________________________________________________________________
+Train on 2751 samples, validate on 84 samples
+Epoch 1/10
+ - 5s - loss: 0.6555 - acc: 0.6136 - precision: 0.4982 - recall: 0.9964 - val_loss: 0.4593 - val_acc: 0.9405 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 2/10
+ - 5s - loss: 0.5904 - acc: 0.6768 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4069 - val_acc: 0.8333 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 3/10
+ - 5s - loss: 0.5293 - acc: 0.7248 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4800 - val_acc: 0.7500 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 4/10
+ - 5s - loss: 0.4562 - acc: 0.7750 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4503 - val_acc: 0.7143 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 5/10
+ - 5s - loss: 0.4019 - acc: 0.8132 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.8315 - val_acc: 0.5952 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 6/10
+ - 5s - loss: 0.3732 - acc: 0.8317 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5856 - val_acc: 0.7024 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 7/10
+ - 5s - loss: 0.3571 - acc: 0.8375 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5401 - val_acc: 0.7143 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 8/10
+ - 5s - loss: 0.3202 - acc: 0.8622 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4531 - val_acc: 0.7381 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 9/10
+ - 5s - loss: 0.3077 - acc: 0.8619 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.3163 - val_acc: 0.8690 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 10/10
+ - 5s - loss: 0.2836 - acc: 0.8728 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4746 - val_acc: 0.7738 - val_precision: 0.5000 - val_recall: 1.0000
+[119 280]
+Accuracy: 86.22%
+All done!

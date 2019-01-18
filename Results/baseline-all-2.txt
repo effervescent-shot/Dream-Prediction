@@ -1,0 +1,191 @@
+Dream Networks are ready!
+Dream Networks are ready!
+Balancing the dataset with 
+Label distribution in the train set  [[0.00000e+00 1.08283e+05]
+ [1.00000e+00 1.51717e+05]]
+Label distribution in the validation set  [[0.000e+00 1.985e+03]
+ [1.000e+00 8.015e+03]]
+Label distribution in the test set  [[0.0000e+00 6.0210e+03]
+ [1.0000e+00 3.5979e+04]]
+Train matrix:  (260000, 256) (260000, 2)
+Validation matrix:  (10000, 256) (10000, 2)
+Test matrix:  (42000, 256) (42000, 2)
+Building model and compiling functions...
+Starting training...: model  Baseline  batch size  100  with input  20sec_raw_data_zip.npz
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense (Dense)                (None, 128)               32896     
+_________________________________________________________________
+dense_1 (Dense)              (None, 64)                8256      
+_________________________________________________________________
+dense_2 (Dense)              (None, 32)                2080      
+_________________________________________________________________
+dense_3 (Dense)              (None, 16)                528       
+_________________________________________________________________
+dropout (Dropout)            (None, 16)                0         
+_________________________________________________________________
+dense_4 (Dense)              (None, 2)                 34        
+=================================================================
+Total params: 43,794
+Trainable params: 43,794
+Non-trainable params: 0
+_________________________________________________________________
+Train on 260000 samples, validate on 10000 samples
+Epoch 1/30
+ - 13s - loss: 0.7132 - acc: 0.5790 - precision: 0.4998 - recall: 0.9996 - val_loss: 0.6377 - val_acc: 0.8015 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 2/30
+ - 12s - loss: 0.7097 - acc: 0.5837 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6380 - val_acc: 0.8015 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 3/30
+ - 12s - loss: 0.7081 - acc: 0.5846 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6390 - val_acc: 0.8011 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 4/30
+ - 13s - loss: 0.7067 - acc: 0.5862 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6307 - val_acc: 0.8011 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 5/30
+ - 12s - loss: 0.7050 - acc: 0.5887 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6342 - val_acc: 0.8014 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 6/30
+ - 12s - loss: 0.7032 - acc: 0.5910 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6313 - val_acc: 0.8037 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 7/30
+ - 13s - loss: 0.7007 - acc: 0.5946 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6241 - val_acc: 0.8097 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 8/30
+ - 12s - loss: 0.6979 - acc: 0.6000 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6261 - val_acc: 0.8150 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 9/30
+ - 12s - loss: 0.6945 - acc: 0.6042 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6231 - val_acc: 0.8216 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 10/30
+ - 12s - loss: 0.6891 - acc: 0.6121 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6148 - val_acc: 0.8287 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 11/30
+ - 12s - loss: 0.6817 - acc: 0.6214 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6063 - val_acc: 0.8319 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 12/30
+ - 12s - loss: 0.6720 - acc: 0.6346 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5955 - val_acc: 0.8212 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 13/30
+ - 12s - loss: 0.6598 - acc: 0.6484 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5958 - val_acc: 0.8048 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 14/30
+ - 12s - loss: 0.6436 - acc: 0.6662 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5877 - val_acc: 0.7904 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 15/30
+ - 12s - loss: 0.6238 - acc: 0.6851 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5508 - val_acc: 0.8281 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 16/30
+ - 12s - loss: 0.5990 - acc: 0.7084 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5415 - val_acc: 0.8121 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 17/30
+ - 12s - loss: 0.5714 - acc: 0.7295 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4727 - val_acc: 0.8577 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 18/30
+ - 12s - loss: 0.5413 - acc: 0.7527 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5044 - val_acc: 0.8068 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 19/30
+ - 13s - loss: 0.5115 - acc: 0.7728 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4886 - val_acc: 0.8032 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 20/30
+ - 12s - loss: 0.4818 - acc: 0.7916 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4478 - val_acc: 0.8272 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 21/30
+ - 12s - loss: 0.4572 - acc: 0.8070 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4398 - val_acc: 0.8213 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 22/30
+ - 12s - loss: 0.4324 - acc: 0.8213 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4162 - val_acc: 0.8367 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 23/30
+ - 12s - loss: 0.4094 - acc: 0.8344 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5421 - val_acc: 0.7506 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 24/30
+ - 12s - loss: 0.3903 - acc: 0.8437 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.3902 - val_acc: 0.8385 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 25/30
+ - 12s - loss: 0.3720 - acc: 0.8538 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.3130 - val_acc: 0.8973 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 26/30
+ - 13s - loss: 0.3552 - acc: 0.8622 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.3836 - val_acc: 0.8479 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 27/30
+ - 12s - loss: 0.3407 - acc: 0.8699 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4808 - val_acc: 0.7960 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 28/30
+ - 12s - loss: 0.3260 - acc: 0.8765 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.5613 - val_acc: 0.7556 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 29/30
+ - 12s - loss: 0.3140 - acc: 0.8826 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.3718 - val_acc: 0.8595 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 30/30
+ - 12s - loss: 0.3029 - acc: 0.8888 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.4112 - val_acc: 0.8433 - val_precision: 0.5000 - val_recall: 1.0000
+[ 5524 36476]
+Accuracy: 80.33%
+Balancing the dataset with 
+Label distribution in the train set  [[0.0000e+00 1.2561e+04]
+ [1.0000e+00 1.8249e+04]]
+Label distribution in the validation set  [[  0. 237.]
+ [  1. 948.]]
+Label distribution in the test set  [[0.000e+00 9.480e+02]
+ [1.000e+00 3.555e+03]]
+Train matrix:  (30810, 512) (30810, 2)
+Validation matrix:  (1185, 512) (1185, 2)
+Test matrix:  (4503, 512) (4503, 2)
+Building model and compiling functions...
+Starting training...: model  Baseline  batch size  10  with input  2sec_fft_data_SW_zip.npz
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_5 (Dense)              (None, 128)               65664     
+_________________________________________________________________
+dense_6 (Dense)              (None, 64)                8256      
+_________________________________________________________________
+dense_7 (Dense)              (None, 32)                2080      
+_________________________________________________________________
+dense_8 (Dense)              (None, 16)                528       
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 16)                0         
+_________________________________________________________________
+dense_9 (Dense)              (None, 2)                 34        
+=================================================================
+Total params: 76,562
+Trainable params: 76,562
+Non-trainable params: 0
+_________________________________________________________________
+Train on 30810 samples, validate on 1185 samples
+Epoch 1/30
+ - 15s - loss: 0.7143 - acc: 0.5902 - precision: 0.4998 - recall: 0.9997 - val_loss: 0.6488 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 2/30
+ - 14s - loss: 0.7113 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6420 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 3/30
+ - 14s - loss: 0.7110 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6301 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 4/30
+ - 15s - loss: 0.7108 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6388 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 5/30
+ - 14s - loss: 0.7104 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6158 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 6/30
+ - 15s - loss: 0.7101 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6319 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 7/30
+ - 14s - loss: 0.7100 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6377 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 8/30
+ - 14s - loss: 0.7098 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6377 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 9/30
+ - 14s - loss: 0.7095 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6406 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 10/30
+ - 15s - loss: 0.7094 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6366 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 11/30
+ - 14s - loss: 0.7091 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6293 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 12/30
+ - 14s - loss: 0.7089 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6346 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 13/30
+ - 14s - loss: 0.7088 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6344 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 14/30
+ - 14s - loss: 0.7086 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6269 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 15/30
+ - 15s - loss: 0.7084 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6326 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 16/30
+ - 15s - loss: 0.7082 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6330 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 17/30
+ - 15s - loss: 0.7083 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6292 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 18/30
+ - 14s - loss: 0.7083 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6286 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 19/30
+ - 15s - loss: 0.7080 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6291 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 20/30
+ - 15s - loss: 0.7078 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6274 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 21/30
+ - 15s - loss: 0.7077 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6229 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 22/30
+ - 15s - loss: 0.7076 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6304 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 23/30
+ - 15s - loss: 0.7073 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6358 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 24/30
+ - 15s - loss: 0.7072 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6269 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 25/30
+ - 15s - loss: 0.7069 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6233 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 26/30
+ - 15s - loss: 0.7068 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6318 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 27/30
+ - 15s - loss: 0.7066 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6280 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 28/30
+ - 15s - loss: 0.7064 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6282 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 29/30
+ - 15s - loss: 0.7063 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6266 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+Epoch 30/30
+ - 15s - loss: 0.7061 - acc: 0.5923 - precision: 0.5000 - recall: 1.0000 - val_loss: 0.6281 - val_acc: 0.8000 - val_precision: 0.5000 - val_recall: 1.0000
+[   0 4503]
+Accuracy: 78.95%
+All done!
