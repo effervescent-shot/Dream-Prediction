@@ -88,15 +88,14 @@ def Simple_CNN():
     
     # create model
     model = Sequential()
-    # add layers
+    # add concolutional layers
     model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(32,32,1)))
     model.add(Conv2D(32, kernel_size=3, activation='relu'))
-    # fully connected
+    # fully connected layer
     model.add(Flatten())
     model.add(Dropout(rate=0.35))
     model.add(Dense(3, activation='softmax'))
 
- 
     
     return model
     
@@ -104,12 +103,16 @@ def Simple_CNN():
 def CNN_Image(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 512, 
 	k_regularizer = regularizers.l2(0.001), img_size=32,num_color_chan = 1):
     """ 
-    Fully connected dense neural network
+    Deep convolutional 2D neural network with softmax classifier
 
     :param nb_channels: number of class
     :param dropoutRate: drop-out rate of last layer
     :param act: activation function
+    :param k_size: convolutional kernel size
     :param k_regularizer: kernel regularizer
+    :param d_layer: number of hidden unit in the last layer
+    :param img_size: image size
+    :param num_color_chan = number of color channel in the image, no RGB values used but real electrode values are used
     :param input_dimension: size of the input 
  
    Expecting 32x32x1 image data as input
@@ -119,15 +122,6 @@ def CNN_Image(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 
    Conv2D<128> -  MaxPool2D<2,2> -
    Dense<512> - Dense<3>
    
-   kernel_initializer = glorot_uniform
-   activation = None
-   kernel_size = 3
-   padding = same for convolution, valid for pooling layers
-   
-   loss = categorical_crossentropy
-   optimizer = adam
-   metrics = ['accuracy']
-   
     """
     strides = None
     print('PARAMETERS OF MODELS: ', act, ' ', k_size, ' ', d_layer, ' ', dropoutRate)
@@ -135,9 +129,6 @@ def CNN_Image(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 
     # create model
     model = Sequential()
     # add layers
-    # activation is NONE  
-    #model.add(Conv2D(32, kernel_size=3, activation='relu'))
-
     model.add(Conv2D(32, kernel_size=k_size, input_shape=(img_size,img_size,num_color_chan), 
     	kernel_initializer='glorot_uniform', activation=act, kernel_regularizer=k_regularizer  ))
     model.add(Conv2D(32, kernel_size=k_size, padding='same', kernel_initializer='glorot_uniform', activation=act, kernel_regularizer=k_regularizer) )
@@ -157,15 +148,26 @@ def CNN_Image(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 
     model.add(Dropout(rate=dropoutRate))
     model.add(Dense(nb_channels, activation='softmax'))
     
-    #model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
     return model
 
     
 def CNN_Image_Multi(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 512, 
 	k_regularizer = regularizers.l2(0.001), img_size=32,num_color_chan = 2):
-    """ 
-   Expecting 32x32x1 image data as input
+   """ 
+    Deep convolutional 2D neural network with softmax classifier
+
+    :param nb_channels: number of class
+    :param dropoutRate: drop-out rate of last layer
+    :param act: activation function
+    :param k_size: convolutional kernel size
+    :param k_regularizer: kernel regularizer
+    :param d_layer: number of hidden unit in the last layer
+    :param img_size: image size
+    :param num_color_chan = number of color channel in the image, no RGB values used but delta and beta-gamma power
+    values of electrodes are used
+    :param input_dimension: size of the input 
+ 
+   Expecting 32x32x2 image data as input
    
    Conv2D<32> - Conv2D<32> - Conv2D<32> - Conv2D<32> - MaxPool2D<2,2> - 
    Conv2D<64> - Conv2D<64> - MaxPool2D<2,2> - 
@@ -179,7 +181,6 @@ def CNN_Image_Multi(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_la
     model = Sequential()
     # add layers
     # activation is NONE  
-    #model.add(Conv2D(32, kernel_size=3, activation='relu'))
 
     model.add(Conv2D(32, kernel_size=k_size, input_shape=(img_size,img_size,num_color_chan), 
     	kernel_initializer='glorot_uniform', activation=act, kernel_regularizer=k_regularizer  ))
@@ -200,16 +201,37 @@ def CNN_Image_Multi(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_la
     model.add(Dropout(rate=dropoutRate))
     model.add(Dense(nb_channels, activation='softmax'))
     
-    #model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
     return model
 
     
     
 def CNN_Video(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 512, 
 	k_regularizer = regularizers.l1(0.001), img_size=32,time_slot = 100,num_color_chan=1):
+
+    """ 
+    Deep convolutional 3D neural network with softmax classifier
+
+    :param nb_channels: number of class
+    :param dropoutRate: drop-out rate of last layer
+    :param act: activation function
+    :param k_size: convolutional kernel size
+    :param k_regularizer: kernel regularizer
+    :param d_layer: number of hidden unit in the last layer
+    :param img_size: image size
+    :param time_slot: number of frames/images in a video, length of the video
+    :param num_color_chan = number of color channel in the image/frame, no RGB values used real values of electrodes are used
+    :param input_dimension: size of the input 
+ 
+   Expecting 100x32x32x1 video data as input
+   
+   Conv3D<32> - Conv3D<32> - Conv3D<32> - Conv3D<32> - MaxPool3D<2,2,2> - 
+   Conv3D<64> - Conv3D<64> - MaxPool3D<2,2,2> - 
+   Dense<512> - Dense<3>
+   
+    """
  
     strides = None
+    # In each convolutional layer, 10 consecutive images are convolved
     kernel = (10, k_size, k_size)
 
     print('PARAMETERS OF MODELS: ', act, ' ', k_size, ' ', d_layer)
@@ -232,14 +254,31 @@ def CNN_Video(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 
     model.add(Dropout(rate=dropoutRate))
     model.add(Dense(nb_channels, activation='softmax'))
     
-    # compile model
-    #model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    
     return model
+
 
 def CNN_Video_Multi(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_layer = 512, 
 	k_regularizer = regularizers.l1(0.001), img_size=32,time_slot = 10, num_color_chan=2):
+ """ 
+    Deep convolutional 3D neural network with softmax classifier
 
+    :param nb_channels: number of class
+    :param dropoutRate: drop-out rate of last layer
+    :param act: activation function
+    :param k_size: convolutional kernel size
+    :param k_regularizer: kernel regularizer
+    :param d_layer: number of hidden unit in the last layer
+    :param img_size: image size
+    :param time_slot: number of frames/images in a video, length of the video
+    :param num_color_chan = number of color channel in the image/frame, no RGB values used but delta and beta-gamma power
+    values of electrodes are used
+   Expecting 100x32x32x1 video data as input
+   
+   Conv3D<32> - Conv3D<32> - Conv3D<32> - Conv3D<32> - MaxPool3D<2,2,2> - 
+   Conv3D<64> - Conv3D<64> - MaxPool3D<2,2,2> - 
+   Dense<512> - Dense<3>
+   
+    """
     strides = None
     kernel = (2, k_size, k_size)
     print('PARAMETERS OF MODELS: ', act, ' ', k_size, ' ', d_layer)
@@ -262,16 +301,21 @@ def CNN_Video_Multi(nb_channels=3, dropoutRate = 0.5, act='relu', k_size=3, d_la
     model.add(Dropout(rate=dropoutRate))
     model.add(Dense(nb_channels, activation='softmax'))
     
-    # compile model
-    #model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     
     return model
 
     
 
 
-def LSTM(img_size=32,time_slot = 10,num_color_chan=1):
-    
+def LSTM(nb_channels=3, img_size=32,time_slot = 10,num_color_chan=1):
+    """
+    Recurrent Neural Network for image data
+    Never tested.
+    :param nb_channels: number of class
+    :param img_size: image size
+    :param time_slot: number of frames/images in a video, length of the video
+    :param num_color_chan = number of color channel in the image/frame
+    """
     model = Sequential()
     model.add(LSTM(time_slot, input_shape=(img_size, img_size, num_color_chan), return_sequences=True, activation='sigmoid'))
     model.add(LSTM(time_slot, input_shape=(img_size, img_size, num_color_chan), return_sequences=True, activation='sigmoid'))
@@ -285,10 +329,7 @@ def LSTM(img_size=32,time_slot = 10,num_color_chan=1):
     model.add(Flatten())
     model.add(Dense(128))
     model.add(Dropout(rate=0.5))
-    model.add(Dense(3, activation='softmax'))
-    
-    # compile model
-    #model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.add(Dense(nb_channels, activation='softmax'))
     
     return model
     
